@@ -1,0 +1,9 @@
+http://yuml.me/diagram/nofunky/class/draw
+
+[RuntimeException{bg:violet}]^-[ERCException]
+[ERCException{bg:wheat}]^-[ERCClientException]
+[ERCException]^-[ERCServerException]
+[ERCClientException{bg:yellowgreen}]^-[ERCInstatiateException{bg:yellowgreen}]
+[ERCClientException]^-[ERCSerializationException{bg:yellowgreen}]
+[ERCClientException]^-[ERCDeserializationException{bg:yellowgreen}]
+[ERCServerException{bg:tomato}]^-[ERCHttpResponseException{bg:tomato}]
