@@ -20,6 +20,8 @@
  */
 package org.nextlets.erc.defaults.handler;
 
+import java.io.UnsupportedEncodingException;
+
 import org.nextlets.erc.ERCConfiguration;
 import org.nextlets.erc.ERCConstants;
 import org.nextlets.erc.exception.ERCDeserializationException;
@@ -32,7 +34,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 /**
- *
+ * Default implementation of result deserializer.
  * @author Y.Sh.
  */
 public class ERCResultDeserializerJsonImpl implements ERCResultDeserializer<Object> {
@@ -49,21 +51,27 @@ public class ERCResultDeserializerJsonImpl implements ERCResultDeserializer<Obje
 
         if (contentType != null) {
             String sects[] = contentType.split(";");
+            String responseBodyStr;
+            try {
+                responseBodyStr = new String(responseBody, configuration.getCharset());
+            } catch (UnsupportedEncodingException ex) {
+                throw new ERCDeserializationException("Unsupported charset: " + configuration.getCharset() , ex);
+            }
             for (String sect : sects) {
                 if (ERCConstants.JSON_CONTENT_TYPE.equals(sect)) {
                     Gson gson = new GsonBuilder().setDateFormat(configuration.getDateFormat()).create();
                     try {
-                        return gson.fromJson(new String(responseBody), resultClass);
+                        return gson.fromJson(responseBodyStr, resultClass);
                     } catch (JsonSyntaxException ex) {
                         if (resultClass.isAssignableFrom(String.class)) {
-                            return new String(responseBody);
+                            return responseBodyStr;
                         } else {
                             throw ex;
                         }
                     }
                 } else
                 if (sect.startsWith(ERCConstants.TEXT_CONTENT_TYPE) && resultClass.isAssignableFrom(String.class)) {
-               		return new String(responseBody);
+                    return responseBodyStr;
                 } else
                 if (resultClass.isAssignableFrom(byte[].class) || resultClass.isAssignableFrom(Byte[].class)) {
                     return responseBody;
