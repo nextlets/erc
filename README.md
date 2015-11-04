@@ -1,4 +1,4 @@
-# ![](https://raw.githubusercontent.com/nextlets/erc/master/docs/erc.png) Easy REST client for JAVA (1.0.4)
+# ![](https://raw.githubusercontent.com/nextlets/erc/master/docs/erc.png) Easy REST Client (1.0.4) for JAVA
 
 This project was conceived as easy and lightweight alternative
 to the existing REST frameworks such as Spring, also the project
